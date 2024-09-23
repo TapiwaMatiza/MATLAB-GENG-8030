@@ -1,0 +1,153 @@
+%% quiz 1
+%1
+t=0:0.01:50;
+v=3*sin(log(t))+2*cos(4*t);
+a=cos(3*t)-2*sin(-t);
+
+figure
+plot(t,v,'r',t,a, 'b')
+xlabel('time')
+ylabel('velocity and acceleration')
+
+%2
+x=sin(-pi):0.005:log(1000);
+
+%3
+n=[2 5 12];
+roots(n)
+
+%4
+x=[1 2 -25 -26 120];
+roots(x)
+
+%% quiz 2
+%1
+function [t] = time(h,v0,g)
+%solve the quadratic equation as 0=(0.5*g)t^2-(v0)t+h
+t0=[(0.5*g), -v0, h];
+t=roots(t0);
+end
+
+run the above as a function file
+[t] = time(100,50,0.81);
+output is 121.4233s  and 2.0335s
+
+%2
+f= @(x) 30*x.^2-300*x+4
+x=-10:0.01:10;
+y=f(x);
+figure
+plot(x,y)
+
+f= @(x) 30*x.^2-300*x+4
+x=4:0.01:6;
+y=f(x);
+figure
+plot(x,y)
+
+x_min=fminbnd(f, -10, 10)
+y_min=f(x_min)
+
+%3
+f=@(x,y) x.^3+4.*x.^2-y.^4+1;
+g=@(x,y) x-f(x,y)+exp(y);
+h=@(x,y) 2.*g(x,y)-f(x,y)+sin(x+y);
+
+x=[1 2 3];
+y=[2 3 4];
+ans=g(x,y)+f(x,y)-h(x,y);
+disp(round(ans))
+
+%% quiz 3
+%2
+A=[5 6 7; 8 9 10; 11 12 13];
+B=[1 0 0; 1 9 2; 0 -2 3];
+C = xor(A,B)
+% Multiply matrices A and C
+D = A * C
+% Calculate the minimum value in matrix D
+min_value_D = min(D(:))
+%answer is 7 5 5
+
+%5
+s=[3 4 5; 9 16 25];
+t=[5 8 9; 4 16 25];
+
+s~=t
+s<t
+
+%6
+f=@(x) -4+exp(-0.6*x)*sin(3.*x+2)+(sin(x).^2)+2*cos(x)
+x_min=fminbnd(f, 0, 1)
+y_min=f(x_min)
+
+%% Quiz 4
+%1
+x=[1.75 3 7 2.25 4 1.23 5];
+y=[1 2 3 4 5 6 7];
+f=polyfit(x,y,6)
+J=sum((polyval(f,x)-y).^2)
+s=sum((y-mean(y)).^2)
+r2=1-J/s
+
+%2
+% Define the range for x
+x = 0:0.01:5;
+% Calculate y1 using the given function
+y1 = exp(-3*x) .* sin(3*x - 4) + cos(x.^2);
+% Calculate y2 using the given function
+y2 = 0.2*x.^3 - 0.3 * cos(x.^3) + log(x + 1);
+% Plot the functions with specified line styles and markers
+figure
+plot(x, y1, 'b-o', 'LineWidth', 1.5, 'MarkerIndices', 1:50:length(x));
+hold on;
+plot(x, y2, 'g--s', 'LineWidth', 1.5, 'MarkerIndices', 1:50:length(x));
+hold off;
+grid on;
+
+%3
+x=[0 0.25 0.5 0.75 1 1.25 1.5 1.75 2 2.25 2.5];
+y=[12 10 9 8 7 6 5 4 3 2 4];
+
+f=polyfit(x,y,8)
+J=sum((polyval(f,x)-y).^2)
+s=sum((y-mean(y)).^2)
+r2=1-J/s
+
+year=[2012 2013 2014 2015 2016 2017 2018 2019 2020 2021];
+profit=[1200 3700 4600 6100 8200 15500 19700 34300 63200 102900];
+x=1:10
+f=polyfit(x,profit,3)
+J=sum((polyval(f,x)-profit).^2)
+s=sum((profit-mean(profit)).^2)
+r2=1-J/s
+
+%y=a0+a1*cos(x)+a2*sin(2*x)
+x=[1 2 3 4 5 6 7];
+y=[1.17 0.93 -0.71 -1.31 2.01 3.42 1.53];
+n=length(x);
+X=[ones(n,1),cos(x)',sin(2*x)']
+a=X\y'
+
+%% quiz 5
+%1
+t=[10 20 30 50 60];
+v=[18 31 34 49 66];
+
+y2est = interp1(t,v,40)
+t_int = 40;
+T_int = spline(t,v,t_int)
+difference=y2est-T_int
+
+%2
+time=[0 340 520 750 882 997 1010];
+temperature=[321 298 261 221 170 130 110];
+
+p = polyfit(time, log10(temperature), 1)
+temperature_at_800sec = 10^p(2) * 10^(p(1)*800)
+
+%3
+x=[12 2; 18 43; 23 21; 2 14; 31 26];
+x=[ones(5, 1), x]
+y=[42 109 56 48 89]'
+a=x\y
